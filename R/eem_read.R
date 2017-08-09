@@ -318,13 +318,15 @@ eem_read_generic <- function(file) {
 
   dat <- simplify2array(dat)
 
-  M <- apply(dat, 1, as.numeric)
+  M <- suppressWarnings(apply(dat, 1, as.numeric))
 
   wl1 <- as.vector(na.omit(M[1, ]))
   wl2 <- as.vector(na.omit(M[, 1]))
 
   M <- M[-1, ]
   M <- M[, -1]
+
+  M <- M[, colSums(is.na(M)) != nrow(M)]
 
   if (max(wl1) > max(wl2)) {
     ex <- wl2
