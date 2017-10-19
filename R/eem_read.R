@@ -313,12 +313,19 @@ eem_read_generic <- function(file) {
   dat <- stringr::str_split(dat, "\t|,")
 
   n_col <- unlist(lapply(dat, length))
-  expected_col <- as.numeric(names(sort(-table(n_col)))[1])
+
+  res <- as.data.frame(table(n_col))
+  res <- res[which.max(res$n_col), ]
+
+  expected_col <- res$n_col
   dat[lapply(dat, length) != expected_col] <- NULL
 
   dat <- simplify2array(dat)
 
   M <- suppressWarnings(apply(dat, 1, as.numeric))
+
+  M <- M[rowSums(is.na(M))!=ncol(M), ]
+  M <- M[, colSums(is.na(M))!=nrow(M)]
 
   wl1 <- as.vector(na.omit(M[1, ]))
   wl2 <- as.vector(na.omit(M[, 1]))
