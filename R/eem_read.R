@@ -306,7 +306,9 @@ eem_read_fluoromax4 <- function(data, file) {
 
 # ****************************************************************************
 # Try to read a generic file. Need better verification.
+# Export the function for now, eventually this should not be exported.
 # ****************************************************************************
+#' @export
 eem_read_generic <- function(file) {
 
   dat <- readr::read_lines(file)
